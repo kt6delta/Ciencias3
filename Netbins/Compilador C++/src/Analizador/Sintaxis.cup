@@ -1,0 +1,159 @@
+package Analizador;
+
+import java_cup.runtime.Symbol;
+
+parser code
+{:
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+}
+:};
+
+terminal Int, Linea, Comillas, Comillas_S, B_Slash, T_datoN, Cadena, Vacio, Nulo, Include,
+    If, Else, Do, While, For, Switch, Case, Break, Default, Print, Scan, Gets, Fgets,
+    Return, Unsigned, Sistema, SizeOf, Igual, Suma, Resta, Multiplicacion, 
+    Division, Modulo, Op_logico, Op_relacional, Op_atribucion, Op_incremento, 
+    Op_booleano, Numeral, Parentesis_a, Parentesis_c, Llave_a, Llave_c, Corchete_a,
+    Corchete_c, Main, P_coma, Dos_P, Punto, Coma, Identificador, Numero, ERROR;
+non terminal INICIO, MAIN, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
+    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, PRINT, INCLUDE,
+    SENTENCIA_INCLUDE, LIBRERIA, TIPO_DECLARACION_N, TIPO_DECLARACION_C, TIPO_SENTENCIA_B,
+    TIPO_FOR, TIPO_PRINT, LEER_T, SYSTEM, SIZEOF, UNSIGNED;
+
+start with INICIO;
+
+INICIO ::= 
+    Int MAIN Return Numero|
+    Vacio MAIN |
+    MAIN
+;
+
+MAIN ::=
+    Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c
+;
+
+INCLUDE ::= 
+    Numeral Include SENTENCIA_INCLUDE P_coma
+;
+
+SENTENCIA_INCLUDE ::=
+    Op_relacional LIBRERIA Op_relacional |
+    Comillas LIBRERIA Comillas
+;
+
+LIBRERIA ::=
+    Identificador Punto Identificador |
+    Identificador
+;
+
+SENTENCIA ::= 
+    SENTENCIA DECLARACION |
+    DECLARACION |
+    SENTENCIA IF | 
+    IF |
+    SENTENCIA IF_ELSE |
+    IF_ELSE |
+    SENTENCIA WHILE |
+    WHILE |
+    SENTENCIA DO_WHILE |
+    DO_WHILE |
+    SENTENCIA FOR |
+    FOR |
+    SENTENCIA PRINT |
+    PRINT |
+    SENTENCIA LEER_T |
+    SENTENCIA SYSTEM |
+    SENTENCIA SIZEOF |
+    SENTENCIA UNSIGNED |
+    LEER_T |
+    SYSTEM |
+    SIZEOF |
+    UNSIGNED
+;
+DECLARACION ::= 
+    T_datoN Identificador P_coma | 
+    T_datoN Identificador TIPO_DECLARACION_N P_coma |
+    Cadena Identificador P_coma |
+    Cadena Identificador Igual TIPO_DECLARACION_C P_coma
+;
+
+TIPO_DECLARACION_N ::=
+    Op_atribucion Numero |
+    Igual Numero |
+    Op_incremento
+;
+TIPO_DECLARACION_C ::=
+    Comillas Comillas |
+    Comillas Identificador Comillas
+;
+
+IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
+;
+SENTENCIA_BOOLEANA ::= 
+    Op_booleano | 
+    Identificador Op_relacional TIPO_SENTENCIA_B
+;
+
+TIPO_SENTENCIA_B ::=
+    Op_booleano |
+    Numero |
+    Identificador |
+    Comillas Comillas |
+    Comillas Identificador Comillas
+;
+
+IF_ELSE ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c Else Llave_a SENTENCIA Llave_c 
+;
+WHILE ::= While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
+;
+DO_WHILE ::= Do Llave_a SENTENCIA Llave_c While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c P_coma
+;
+FOR ::= For Parentesis_a SENTENCIA_FOR Parentesis_c Llave_a SENTENCIA Llave_c
+;
+SENTENCIA_FOR ::=
+    T_datoN TIPO_FOR |
+    TIPO_FOR
+;
+
+TIPO_FOR ::=
+    Identificador Igual Numero P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR
+;
+
+DECLARACION_FOR ::= 
+    Identificador Op_atribucion Numero |
+    Identificador Op_incremento | 
+    Op_incremento Identificador
+;
+
+PRINT ::= 
+    Print Parentesis_a TIPO_PRINT Parentesis_c P_coma
+;
+
+TIPO_PRINT ::=
+    Identificador|
+    Comillas Identificador Comillas
+;
+
+LEER_T ::=
+    Scan Parentesis_a Comillas Modulo Identificador Comillas Coma Op_logico Identificador Parentesis_c P_coma |
+    Fgets Parentesis_a Identificador Coma Identificador Coma Identificador Parentesis_c P_coma |
+    Gets Parentesis_a Identificador Parentesis_c P_coma
+;
+
+SYSTEM ::=
+    Sistema Parentesis_a Comillas Identificador Comillas Parentesis_c P_coma
+;
+
+SIZEOF ::=
+    SizeOf Parentesis_a Identificador Parentesis_c
+;
+
+UNSIGNED ::=
+    Unsigned Parentesis_a Identificador Parentesis_c
+;

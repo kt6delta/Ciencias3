@@ -1,0 +1,602 @@
+package Analizador;
+
+import java_cup.runtime.Symbol;
+
+parser code/*Permite retornar la cadena o la sentencia que se esta anlizando*/
+{:
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+}
+:};
+
+/*Los simbolos que ya estan definidas en el lexico*/
+terminal Linea, Comillas, Comillas_S, B_Slash, Byte, Int, Char, Long, Float, Double, Cadena, 
+    Vacio, Nulo, If, Else, Do, While, For, Auto, Break, Case, Const, Continue, Default, Enum,
+    Extern, Goto, Register, Return, Short, Signed, Sizeof, Static, Struct, Cont_Cadena,
+    Switch, Typedef, Union, Unsigned, Void, Volatile, Try, Catch, Include, Using,
+    Namespace, Std, Cin, Cout, Define, Scanf, Gets, Fgets, Igual, Suma, Resta, Multiplicacion, 
+    Modulo, Division, Operador_Logico_And, Operador_Logico_Or, Operador_Logico_Not,
+    Operador_bit_a_bit_And, Operador_bit_a_bit_Or, Operador_relacional_Mayor,
+    Operador_relacional_Menor, Operador_relacional_Igual, Operador_relacional_Diferente,
+    Operador_relacional_mayoroIgual, Operador_relacional_menoroIgual,
+    Operador_relacional_DesplazamientoI, Operador_relacional_DesplazamientoD,
+    Operador_atribucion_masIgual, Operador_atribucion_menosIgual,
+    Operador_atribucion_porIgual,Operador_atribucion_divisionIgual,
+    Operador_atribucion_porcentajeIgual, Operador_incremento, Operador_decremento,
+    Operador_booleano_True, Operador_booleano_False, Numeral, Parent_a, Parent_c,
+    Llave_a, Llave_c, Corchete_a, Corchete_c, Main, System, Sistema, Printf, P_coma, Punto, Dos_P,
+    Coma, Identificador, Numero, Throw, ERROR;
+
+non terminal INICIO, USING, SENTENCIA, DECLARACION, SENTENCIA_BOOLEANA, IF, IF_ELSE, 
+    WHILE, DO_WHILE, FOR, SENTENCIA_FOR, DECLARACION_FOR, TRY_CATCH, SWITCH, 
+    SENTENCIA_SWITCH, SENTENCIA_CASE, SENTENCIA_DEFAULT, MAIN, IMPORT, 
+    SENTENCIA_IMPORT, PRINTF, SENTENCIA_PRINTF, RETURN, SIZEOF, ASIGNACION, 
+    VOLATILE, CONST, STATIC, ENUM, SENTENCIA_ENUM, AUTO, GLOBAL, STRUCT, 
+    SENTENCIA_STRUCT, ASIGNACION_STRUCT, SYSTEM, SISTEMA, DEFINE, SCANF, LECTURA, 
+    GUARDAR, SENTENCIA_TRY, CIN, COUT, SUMA, RESTA, MULTIPLICACION, DIVISION,
+    TYPEDEF, CONTINUE, UNION, GOTO, SENTENCIA_SUMA, INCLUDE,COMA,
+    SENTENCIA_RESTA, SENTENCIA_MULTIPLICACION, SENTENCIA_DIVISION, 
+    SENTENCIA_TYPEDEF, SENTENCIA_CONTINUE, SENTENCIA_UNION, SENTENCIA_GOTO, 
+    LIBRERIA, NAMESPACE, TIPO_FOR, LEER_T, UNSIGNED;
+
+start with INICIO;
+
+INICIO ::= 
+    IMPORT GLOBAL USING MAIN |
+    IMPORT USING MAIN |
+    GLOBAL USING MAIN |
+    USING MAIN |
+    IMPORT GLOBAL MAIN |
+    IMPORT MAIN |
+    GLOBAL MAIN |
+    MAIN
+;
+
+IMPORT ::=
+    IMPORT SENTENCIA_IMPORT |
+    SENTENCIA_IMPORT
+;
+
+SENTENCIA_IMPORT ::=
+    Numeral Include Operador_relacional_Menor Identificador Operador_relacional_Mayor |
+   
+    Numeral Include Operador_relacional_Menor Identificador Punto Identificador Operador_relacional_Mayor
+;
+
+GLOBAL ::=
+    GLOBAL DECLARACION |
+    DECLARACION |
+    GLOBAL VOLATILE |
+    VOLATILE |
+    GLOBAL STATIC |
+    STATIC |
+    GLOBAL ENUM |
+    ENUM |
+    GLOBAL AUTO |
+    AUTO |
+    GLOBAL CONST |
+    CONST |
+    GLOBAL Unsigned P_coma |
+    Unsigned P_coma |
+    GLOBAL STRUCT |
+    STRUCT |
+    GLOBAL DEFINE |
+    DEFINE
+;
+
+DEFINE ::=
+    Numeral Define Identificador Numero |
+    Numeral Define Identificador Numero Punto Numero |
+    Numeral Define Identificador Comillas Identificador Comillas
+;
+
+MAIN ::=
+    Int Main Parent_a Parent_c Llave_a SENTENCIA Llave_c |
+    Int Main Parent_a Parent_c Llave_a Llave_c |
+    Main Parent_a Parent_c Llave_a SENTENCIA Llave_c |
+    Main Parent_a Parent_c Llave_a Llave_c |
+    Void Main Parent_a Parent_c Llave_a SENTENCIA Llave_c |
+    Void Main Parent_a Parent_c Llave_a Llave_c |
+    Using Namespace Std P_coma
+;
+
+USING ::=
+    Using Namespace Std P_coma
+;
+
+SENTENCIA ::= 
+    SENTENCIA DECLARACION |
+    DECLARACION |
+    SENTENCIA IF | 
+    IF |
+    SENTENCIA IF_ELSE |
+    IF_ELSE |
+    SENTENCIA WHILE |
+    WHILE |
+    SENTENCIA DO_WHILE
+    DO_WHILE |
+    SENTENCIA FOR |
+    FOR |
+    SENTENCIA TRY_CATCH |
+    TRY_CATCH |
+    SENTENCIA SWITCH |
+    SWITCH |
+    SENTENCIA PRINTF |
+    PRINTF |
+    SENTENCIA RETURN |
+    RETURN |
+    SENTENCIA SIZEOF 
+    SIZEOF |
+    SENTENCIA ASIGNACION |
+    ASIGNACION |
+    SENTENCIA VOLATILE |
+    VOLATILE |
+    SENTENCIA CONST |
+    CONST |
+    SENTENCIA STATIC |
+    STATIC |
+    SENTENCIA_ENUM |
+    ENUM |
+    SENTENCIA AUTO |
+    AUTO |
+    SENTENCIA STRUCT |
+    STRUCT |
+    SENTENCIA SISTEMA |
+    SISTEMA |
+    SENTENCIA SCANF |
+    SCANF |
+    SENTENCIA CIN |
+    CIN |
+    SENTENCIA COUT |
+    COUT |
+    SENTENCIA SUMA |
+    SUMA |
+    SENTENCIA RESTA |
+    RESTA |
+    SENTENCIA MULTIPLICACION |
+    MULTIPLICACION |
+    SENTENCIA DIVISION |
+    DIVISION |
+    SENTENCIA TYPEDEF |
+    TYPEDEF |
+    SENTENCIA CONTINUE |
+    CONTINUE |
+    SENTENCIA UNION |
+    UNION |
+    SENTENCIA GOTO |
+    GOTO |
+    SENTENCIA DEFINE |
+    DEFINE |
+    SENTENCIA LEER_T |
+    LEER_T |
+    SENTENCIA UNSIGNED |
+    UNSIGNED
+;
+
+VOLATILE ::= Volatile DECLARACION
+;
+
+STATIC ::= Static DECLARACION
+;
+
+ENUM ::=
+    Enum Identificador Igual Llave_a SENTENCIA_ENUM Llave_c P_coma
+;
+
+SENTENCIA_ENUM ::=
+    SENTENCIA_ENUM Identificador |
+    Identificador
+;
+
+CONST ::=
+    Const Int Identificador Igual Numero P_coma |
+    Const Int Identificador Igual Numero Punto Numero P_coma |
+    Const Int Identificador Igual Comillas Identificador Comillas P_coma
+;
+
+AUTO ::=
+    Auto Identificador P_coma |
+    Auto Identificador Igual Numero P_coma |
+    Auto Identificador Igual Numero Punto Numero P_coma |
+    Auto Identificador Igual Comillas Comillas P_coma |
+    Auto Identificador Igual Comillas Identificador Comillas P_coma
+;
+
+DECLARACION ::= 
+    Byte Identificador P_coma | 
+    Byte Identificador Operador_atribucion_masIgual Numero P_coma |
+    Byte Identificador Operador_atribucion_menosIgual Numero P_coma |
+    Byte Identificador Operador_atribucion_porIgual Numero P_coma |
+    Byte Identificador Operador_atribucion_divisionIgual Numero P_coma |
+    Byte Identificador Operador_atribucion_porcentajeIgual Numero P_coma |
+    Byte Identificador Operador_atribucion_masIgual Punto Numero P_coma |
+    Byte Identificador Operador_atribucion_menosIgual Punto Numero P_coma |
+    Byte Identificador Operador_atribucion_porIgual Punto Numero P_coma |
+    Byte Identificador Operador_atribucion_divisionIgual Punto Numero P_coma |
+    Byte Identificador Operador_atribucion_porcentajeIgual Punto Numero P_coma |
+    Byte Identificador Igual Numero P_coma |
+    Byte Identificador Igual Numero Punto Numero P_coma |
+    Byte Identificador Operador_incremento P_coma | 
+    Byte Identificador Operador_decremento P_coma | 
+    Byte Operador_incremento Identificador P_coma |
+    Byte Operador_decremento Identificador P_coma |
+    Int Identificador P_coma | 
+    Int Identificador Operador_atribucion_masIgual Numero P_coma |
+    Int Identificador Operador_atribucion_menosIgual Numero P_coma |
+    Int Identificador Operador_atribucion_porIgual Numero P_coma |
+    Int Identificador Operador_atribucion_divisionIgual Numero P_coma |
+    Int Identificador Operador_atribucion_porcentajeIgual Numero P_coma |
+    Int Identificador Operador_atribucion_masIgual Punto Numero P_coma |
+    Int Identificador Operador_atribucion_menosIgual Punto Numero P_coma |
+    Int Identificador Operador_atribucion_porIgual Punto Numero P_coma |
+    Int Identificador Operador_atribucion_divisionIgual Punto Numero P_coma |
+    Int Identificador Operador_atribucion_porcentajeIgual Punto Numero P_coma |
+    Int Identificador Igual Numero P_coma |
+    Int Identificador Igual Numero Identificador Igual Numero P_coma |
+    Int Identificador Igual Numero Coma Igual Numero P_coma |
+    Int Identificador Igual Numero Punto Numero P_coma |
+    Int Identificador Operador_incremento P_coma | 
+    Int Identificador Operador_decremento P_coma | 
+    Int Operador_incremento Identificador P_coma |
+    Int Operador_decremento Identificador P_coma |
+    Char Identificador P_coma | 
+    Char Identificador Operador_atribucion_masIgual Numero P_coma |
+    Char Identificador Operador_atribucion_menosIgual Numero P_coma |
+    Char Identificador Operador_atribucion_porIgual Numero P_coma |
+    Char Identificador Operador_atribucion_divisionIgual Numero P_coma |
+    Char Identificador Operador_atribucion_porcentajeIgual Numero P_coma |
+    Char Identificador Operador_atribucion_masIgual Punto Numero P_coma |
+    Char Identificador Operador_atribucion_menosIgual Punto Numero P_coma |
+    Char Identificador Operador_atribucion_porIgual Punto Numero P_coma |
+    Char Identificador Operador_atribucion_divisionIgual Punto Numero P_coma |
+    Char Identificador Operador_atribucion_porcentajeIgual Punto Numero P_coma |
+    Char Identificador Igual Numero P_coma |
+    Char Identificador Igual Numero Punto Numero P_coma |
+    Char Identificador Operador_incremento P_coma | 
+    Char Identificador Operador_decremento P_coma | 
+    Char Operador_incremento Identificador P_coma |
+    Char Operador_decremento Identificador P_coma |
+    Long Identificador P_coma | 
+    Long Identificador Operador_atribucion_masIgual Numero P_coma |
+    Long Identificador Operador_atribucion_menosIgual Numero P_coma |
+    Long Identificador Operador_atribucion_porIgual Numero P_coma |
+    Long Identificador Operador_atribucion_divisionIgual Numero P_coma |
+    Long Identificador Operador_atribucion_porcentajeIgual Numero P_coma |
+    Long Identificador Operador_atribucion_masIgual Punto Numero P_coma |
+    Long Identificador Operador_atribucion_menosIgual Punto Numero P_coma |
+    Long Identificador Operador_atribucion_porIgual Punto Numero P_coma |
+    Long Identificador Operador_atribucion_divisionIgual Punto Numero P_coma |
+    Long Identificador Operador_atribucion_porcentajeIgual Punto Numero P_coma |
+    Long Identificador Igual Numero P_coma |
+    Long Identificador Igual Numero Punto Numero P_coma |
+    Long Identificador Operador_incremento P_coma | 
+    Long Identificador Operador_decremento P_coma | 
+    Long Operador_incremento Identificador P_coma |
+    Long Operador_decremento Identificador P_coma |
+    Float Identificador P_coma | 
+    Float Identificador Operador_atribucion_masIgual Numero P_coma |
+    Float Identificador Operador_atribucion_menosIgual Numero P_coma |
+    Float Identificador Operador_atribucion_porIgual Numero P_coma |
+    Float Identificador Operador_atribucion_divisionIgual Numero P_coma |
+    Float Identificador Operador_atribucion_porcentajeIgual Numero P_coma |
+    Float Identificador Operador_atribucion_masIgual Punto Numero P_coma |
+    Float Identificador Operador_atribucion_menosIgual Punto Numero P_coma |
+    Float Identificador Operador_atribucion_porIgual Punto Numero P_coma |
+    Float Identificador Operador_atribucion_divisionIgual Punto Numero P_coma |
+    Float Identificador Operador_atribucion_porcentajeIgual Punto Numero P_coma |
+    Float Identificador Igual Numero P_coma |
+    Float Identificador Igual Numero Punto Numero P_coma |
+    Float Identificador Operador_incremento P_coma | 
+    Float Identificador Operador_decremento P_coma | 
+    Float Operador_incremento Identificador P_coma |
+    Float Operador_decremento Identificador P_coma |
+    Double Identificador P_coma | 
+    Double Identificador Operador_atribucion_masIgual Numero P_coma |
+    Double Identificador Operador_atribucion_menosIgual Numero P_coma |
+    Double Identificador Operador_atribucion_porIgual Numero P_coma |
+    Double Identificador Operador_atribucion_divisionIgual Numero P_coma |
+    Double Identificador Operador_atribucion_porcentajeIgual Numero P_coma |
+    Double Identificador Operador_atribucion_masIgual Punto Numero P_coma |
+    Double Identificador Operador_atribucion_menosIgual Punto Numero P_coma |
+    Double Identificador Operador_atribucion_porIgual Punto Numero P_coma |
+    Double Identificador Operador_atribucion_divisionIgual Punto Numero P_coma |
+    Double Identificador Operador_atribucion_porcentajeIgual Punto Numero P_coma |
+    Double Identificador Igual Numero P_coma |
+    Double Identificador Igual Numero Punto Numero P_coma |
+    Double Identificador Operador_incremento P_coma | 
+    Double Identificador Operador_decremento P_coma | 
+    Double Operador_incremento Identificador P_coma |
+    Double Operador_decremento Identificador P_coma |
+
+    Extern Byte Identificador P_coma |
+    Extern Byte Identificador Igual Identificador P_coma |
+    Extern Int Identificador P_coma |
+    Extern Int Identificador Igual Identificador P_coma |
+    Extern Char Identificador P_coma |
+    Extern Char Identificador Igual Identificador P_coma |
+    Extern Long Identificador P_coma |
+    Extern Long Identificador Igual Identificador P_coma |
+    Extern Float Identificador P_coma |
+    Extern Float Identificador Igual Identificador P_coma |
+    Extern Double Identificador P_coma |
+    Extern Double Identificador Igual Identificador P_coma |
+
+
+    Cadena Identificador Operador_atribucion_masIgual Comillas Comillas P_coma |
+    Cadena Identificador Operador_atribucion_menosIgual Comillas Comillas P_coma |
+    Cadena Identificador Operador_atribucion_porIgual Comillas Comillas P_coma |
+    Cadena Identificador Operador_atribucion_divisionIgual Comillas Comillas P_coma |
+    Cadena Identificador Operador_atribucion_porcentajeIgual Comillas Comillas P_coma |
+    Cadena Identificador Igual Comillas Comillas P_coma |
+    Cadena Identificador Operador_atribucion_masIgual Comillas Identificador Comillas P_coma |
+    Cadena Identificador Operador_atribucion_menosIgual Comillas Identificador Comillas P_coma |
+    Cadena Identificador Operador_atribucion_porIgual Comillas Identificador Comillas P_coma |
+    Cadena Identificador Operador_atribucion_divisionIgual Comillas Identificador Comillas P_coma |
+    Cadena Identificador Operador_atribucion_porcentajeIgual Comillas Identificador Comillas P_coma |
+    Cadena Identificador Igual Comillas Identificador Comillas P_coma
+;
+
+IF ::= 
+    If Parent_a SENTENCIA_BOOLEANA Parent_c Llave_a SENTENCIA Llave_c |
+    If Parent_a SENTENCIA_BOOLEANA Parent_c Llave_a Identificador Igual Numero P_coma Llave_c
+;
+
+SENTENCIA_BOOLEANA ::= 
+    Operador_booleano_True | 
+    Operador_booleano_False | 
+    Identificador Operador_relacional_Mayor Operador_booleano_True |
+    Identificador Operador_relacional_Menor Operador_booleano_True |
+    Identificador Operador_relacional_Igual Operador_booleano_True |
+    Identificador Operador_relacional_Diferente Operador_booleano_True |
+    Identificador Operador_relacional_mayoroIgual Operador_booleano_True |
+    Identificador Operador_relacional_menoroIgual Operador_booleano_True |
+    Identificador Operador_relacional_DesplazamientoI Operador_booleano_True |
+    Identificador Operador_relacional_DesplazamientoD Operador_booleano_True |
+    Identificador Operador_relacional_Mayor Operador_booleano_False |
+    Identificador Operador_relacional_Menor Operador_booleano_False |
+    Identificador Operador_relacional_Igual Operador_booleano_False |
+    Identificador Operador_relacional_Diferente Operador_booleano_False |
+    Identificador Operador_relacional_mayoroIgual Operador_booleano_False |
+    Identificador Operador_relacional_menoroIgual Operador_booleano_False |
+    Identificador Operador_relacional_DesplazamientoI Operador_booleano_False |
+    Identificador Operador_relacional_DesplazamientoD Operador_booleano_False |
+    Identificador Operador_relacional_Mayor Numero |
+    Identificador Operador_relacional_Menor Numero |
+    Identificador Operador_relacional_Igual Numero |
+    Identificador Operador_relacional_Diferente Numero |
+    Identificador Operador_relacional_mayoroIgual Numero |
+    Identificador Operador_relacional_menoroIgual Numero |
+    Identificador Operador_relacional_DesplazamientoI Numero |
+    Identificador Operador_relacional_DesplazamientoD Numero |
+    Identificador Operador_relacional_Mayor Identificador |
+    Identificador Operador_relacional_Menor Identificador |
+    Identificador Operador_relacional_Igual Identificador |
+    Identificador Operador_relacional_Diferente Identificador |
+    Identificador Operador_relacional_mayoroIgual Identificador |
+    Identificador Operador_relacional_menoroIgual Identificador |
+    Identificador Operador_relacional_DesplazamientoI Identificador |
+    Identificador Operador_relacional_DesplazamientoD Identificador |
+    Identificador Operador_relacional_Mayor Comillas Comillas |
+    Identificador Operador_relacional_Menor Comillas Comillas |
+    Identificador Operador_relacional_Igual Comillas Comillas |
+    Identificador Operador_relacional_Diferente Comillas Comillas |
+    Identificador Operador_relacional_mayoroIgual Comillas Comillas |
+    Identificador Operador_relacional_menoroIgual Comillas Comillas |
+    Identificador Operador_relacional_DesplazamientoI Comillas Comillas |
+    Identificador Operador_relacional_DesplazamientoD Comillas Comillas |
+    Identificador Operador_relacional_Mayor Comillas Identificador Comillas |
+    Identificador Operador_relacional_Menor Comillas Identificador Comillas |
+    Identificador Operador_relacional_Igual Comillas Identificador Comillas |
+    Identificador Operador_relacional_Diferente Comillas Identificador Comillas |
+    Identificador Operador_relacional_mayoroIgual Comillas Identificador Comillas |
+    Identificador Operador_relacional_menoroIgual Comillas Identificador Comillas |
+    Identificador Operador_relacional_DesplazamientoI Comillas Identificador Comillas |
+    Identificador Operador_relacional_DesplazamientoD Comillas Identificador Comillas
+;
+
+IF_ELSE ::= If Parent_a SENTENCIA_BOOLEANA Parent_c Llave_a SENTENCIA Llave_c Else Llave_a SENTENCIA Llave_c
+;
+
+WHILE ::= While Parent_a SENTENCIA_BOOLEANA Parent_c Llave_a SENTENCIA Llave_c
+;
+
+DO_WHILE ::= Do Llave_a SENTENCIA Llave_c While Parent_a SENTENCIA_BOOLEANA Parent_c P_coma
+;
+
+FOR ::= For Parent_a SENTENCIA_FOR Parent_c Llave_a SENTENCIA Llave_c
+;
+
+SENTENCIA_FOR ::=
+    Byte Identificador Igual Numero P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR |
+    Int Identificador Igual Numero P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR |
+    Char Identificador Igual Numero P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR |
+    Long Identificador Igual Numero P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR |
+    Float Identificador Igual Numero P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR |
+    Double Identificador Igual Numero P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR |
+    TIPO_FOR
+;
+
+TIPO_FOR ::=
+    Identificador Igual Numero P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR
+;
+
+DECLARACION_FOR ::= 
+    Identificador Operador_atribucion_masIgual Numero |
+    Identificador Operador_atribucion_menosIgual Numero |
+    Identificador Operador_atribucion_porIgual Numero |
+    Identificador Operador_atribucion_divisionIgual Numero |
+    Identificador Operador_atribucion_porcentajeIgual Numero |
+    Identificador Operador_incremento |
+    Identificador Operador_decremento | 
+    Operador_incremento Identificador |
+    Operador_decremento Identificador 
+;
+
+TRY_CATCH ::= Try Llave_a SENTENCIA_TRY Llave_c Catch Parent_a Int Identificador Parent_c Llave_a SENTENCIA_TRY Llave_c
+;
+
+SENTENCIA_TRY ::=
+    SENTENCIA |
+    SENTENCIA Throw Parent_a Numero Parent_c P_coma 
+;
+
+SWITCH ::= Switch Parent_a Identificador Parent_c Llave_a SENTENCIA_SWITCH Llave_c
+;
+
+SENTENCIA_SWITCH ::=
+    SENTENCIA_SWITCH SENTENCIA_CASE |
+    SENTENCIA_CASE |
+    SENTENCIA_SWITCH SENTENCIA_DEFAULT |
+    SENTENCIA_DEFAULT
+;
+
+SENTENCIA_CASE ::=
+    Case Numero Dos_P Llave_a SENTENCIA Llave_c |
+    Case Numero Dos_P Llave_a SENTENCIA Break P_coma Llave_c |
+    Case Numero Punto Numero Dos_P Llave_a SENTENCIA Llave_c |
+    Case Numero Punto Numero Dos_P Llave_a SENTENCIA Break P_coma Llave_c |
+    Case Comillas Identificador Comillas Dos_P Llave_a SENTENCIA Llave_c |
+    Case Comillas Identificador Comillas Dos_P Llave_a SENTENCIA Break P_coma Llave_c
+;
+
+SENTENCIA_DEFAULT ::=
+    Default Dos_P Llave_a SENTENCIA Llave_c |
+    Default Dos_P Llave_a SENTENCIA Break P_coma Llave_c
+;
+
+PRINTF ::= 
+    Printf Parent_a SENTENCIA_PRINTF Parent_c P_coma 
+;
+
+SENTENCIA_PRINTF ::=
+    Comillas Identificador Comillas |
+    Identificador |
+    Comillas Identificador Modulo Identificador Comillas Coma Identificador |
+    Comillas Modulo Identificador Comillas Coma Identificador |
+    Comillas Cont_Cadena Comillas |
+    Cont_Cadena Identificador|
+    Comillas Cont_Cadena Modulo Cont_Cadena Comillas Coma Cont_Cadena |
+    Comillas Modulo Cont_Cadena Comillas Coma Cont_Cadena
+;
+
+
+RETURN ::=
+    Return P_coma | 
+    Return Numero P_coma |
+    Return Identificador P_coma
+;
+
+SIZEOF ::=
+    Sizeof Parent_a Int Parent_c P_coma |
+    Sizeof Parent_a Identificador Parent_c P_coma
+;
+
+SENTENCIA_STRUCT ::=
+    SENTENCIA_STRUCT DECLARACION |
+    DECLARACION
+;
+
+ASIGNACION_STRUCT ::=
+    ASIGNACION_STRUCT Identificador |
+    Identificador |
+    ASIGNACION_STRUCT Numero |
+    Numero |
+    ASIGNACION_STRUCT Numero Punto Numero |
+    Numero Punto Numero |
+    ASIGNACION_STRUCT Comillas Identificador Comillas |
+    Comillas Identificador Comillas |   
+    ASIGNACION_STRUCT Comillas Comillas |
+    Comillas Comillas |
+    ASIGNACION_STRUCT Coma |
+    Coma 
+;
+
+SISTEMA ::=
+    Sistema Parent_a Comillas Identificador Comillas Parent_c P_coma |
+    Sistema Parent_a Cont_Cadena Parent_c P_coma
+;
+
+SCANF ::=
+    Scanf Parent_a Comillas LECTURA Comillas Coma GUARDAR Parent_c P_coma
+;
+
+LECTURA ::=
+    LECTURA Modulo Identificador |
+    Modulo Identificador
+;
+
+GUARDAR ::=
+    GUARDAR Operador_Logico_And Identificador |
+    Operador_Logico_And Identificador Identificador |
+    GUARDAR Operador_Logico_Or Identificador |
+    Operador_Logico_Or Identificador Identificador |
+    GUARDAR Operador_Logico_Not Identificador |
+    Operador_Logico_Not Identificador Identificador |
+    GUARDAR Operador_bit_a_bit_And Identificador |
+    Operador_bit_a_bit_And Identificador Identificador |
+    GUARDAR Operador_bit_a_bit_Or Identificador |
+    Operador_bit_a_bit_Or Identificador Identificador
+;
+
+CIN ::=
+    Cin Operador_relacional_DesplazamientoD Identificador P_coma |
+    Cin Operador_relacional_DesplazamientoD Cont_Cadena P_coma
+;
+
+COUT ::=
+    Cout Operador_relacional_DesplazamientoI Comillas Identificador Comillas P_coma |
+    Cout Operador_relacional_DesplazamientoI Identificador Comillas Operador_relacional_DesplazamientoI Identificador P_coma |
+    Cout Operador_relacional_DesplazamientoI Comillas Cont_Cadena Comillas P_coma |
+    Cout Operador_relacional_DesplazamientoI Cont_Cadena Comillas Operador_relacional_DesplazamientoI Cont_Cadena P_coma |
+    Cout Operador_relacional_DesplazamientoI Cont_Cadena P_coma
+;
+
+SENTENCIA_SUMA ::=
+    Identificador Igual Identificador Suma Identificador P_coma
+;
+
+SENTENCIA_RESTA ::=
+    Identificador Igual Identificador Resta Identificador P_coma  
+;
+
+SENTENCIA_MULTIPLICACION ::=
+    Identificador Igual Identificador Multiplicacion Identificador P_coma 
+;
+
+SENTENCIA_DIVISION ::=
+    Identificador Igual Identificador Division Identificador P_coma  
+;
+
+SENTENCIA_TYPEDEF ::=
+    Typedef Struct Identificador P_coma |
+    Typedef Struct Llave_a SENTENCIA Llave_c Identificador P_coma |
+    Typedef Byte Identificador P_coma |
+    Typedef Int Identificador P_coma |
+    Typedef Char Identificador P_coma |
+    Typedef Long Identificador P_coma |
+    Typedef Float Identificador P_coma |
+    Typedef Double Identificador P_coma
+;
+
+SENTENCIA_CONTINUE ::=
+    Continue P_coma
+;
+
+SENTENCIA_UNION ::=
+    Union Identificador Llave_a SENTENCIA Llave_c P_coma
+;
+
+SENTENCIA_GOTO ::=
+    Goto Identificador P_coma
+;
+
+UNSIGNED ::=
+    Unsigned Parent_a Identificador Parent_c
+;
+

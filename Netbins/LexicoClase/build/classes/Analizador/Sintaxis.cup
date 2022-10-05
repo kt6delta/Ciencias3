@@ -1,0 +1,140 @@
+package Analizador;
+
+import java_cup.runtime.Symbol; /*utiliza simbolos cup*/
+
+parser code  /*retorna el simbolo->la cadena o cadena*/
+{:
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+}
+:};
+
+terminal Linea, Comillas, T_dato, Cadena, If, Else, Do, While, For, Switch, 
+    Include, Define, Break,Case, Continue, Default, Register, Return, Unsigned,              /*no se pueden dividir*/
+    Struct, Typeof, Void, Int, Igual, Suma, Resta, Multiplicacion, Division, 
+    Op_logico, Op_relacional, Op_atribucion, Op_incremento, Op_booleano, Parent_a, 
+    Parent_c, Llave_a, Llave_c, Corchete_a, Corchete_c, Main, P_coma, Punto, Identificador,
+    Numero, ERROR, Numeral, P_puntos, Diple_a, Diple_c;
+
+non terminal IMPORTACION, INICIO, SENTENCIA, DECLARACION, IF, IF_ELSE,               /*se puede dividir*/
+    SENTENCIA_BOOLEANA, FOR, DO_WHILE, WHILE, SWITCH, CASE, VOID, 
+    TYPEOF, DIVISION, RETURN, STRUCT, RESTA, MULTIPLICACION, SUMA, LINEA ;
+
+start with INICIO;
+
+INICIO ::= 
+    IMPORTACION
+    Int Main Parent_a Parent_c Llave_a SENTENCIA Llave_c |                          /*syntax de c++*/
+    Main Parent_a Parent_c Llave_a SENTENCIA Llave_c
+;
+IMPORTACION ::= 
+    Numeral Include Diple_a SENTENCIA Diple_c
+;
+SENTENCIA ::= 
+    SENTENCIA DECLARACION |
+    DECLARACION |
+    SENTENCIA IF | 
+    IF |
+    SENTENCIA IF_ELSE |
+    IF_ELSE |
+    FOR |
+    DO_WHILE|
+    WHILE |
+    SWITCH |
+    CASE |
+    VOID |
+    TYPEOF|
+    DIVISION |
+    RETURN |
+    STRUCT |
+    RESTA |
+    MULTIPLICACION |
+    SUMA |
+    LINEA
+;
+
+DECLARACION ::=
+    ERROR |
+    Register T_dato Identificador P_coma |
+    Int Identificador P_coma |
+    Unsigned Identificador P_coma |
+    Unsigned Identificador Op_atribucion Numero P_coma |
+    Numeral Define Identificador Numero P_coma |
+    T_dato Corchete_a Corchete_c Identificador Op_atribucion Llave_a Numero Numero Llave_c P_coma |
+    T_dato Corchete_a Numero Corchete_c Identificador P_coma
+    T_dato Identificador P_coma | 
+    T_dato Identificador Op_atribucion Numero P_coma |
+    Int Identificador Igual Numero P_coma |
+    T_dato Identificador Op_atribucion Numero Punto Numero P_coma |
+    T_dato Identificador Igual Numero P_coma |
+    T_dato Identificador Igual Numero Punto Numero P_coma |
+    T_dato Identificador Op_incremento P_coma | 
+    T_dato Op_incremento Identificador P_coma | 
+    Cadena Identificador Op_atribucion Comillas Comillas P_coma |
+    Cadena Identificador Igual Comillas Comillas P_coma |
+    Cadena Identificador Op_atribucion Comillas Identificador Comillas P_coma |
+    Cadena Identificador Igual Comillas Identificador Comillas P_coma
+;
+SENTENCIA_BOOLEANA ::= 
+    Op_booleano | 
+    Identificador Op_relacional Op_booleano |
+    Identificador Op_relacional Numero |
+    Identificador Op_relacional Identificador |
+    Identificador Op_relacional Comillas Comillas |
+    Identificador Op_relacional Comillas Identificador Comillas |
+    Identificador Op_logico |
+    Identificador Op_logico Identificador 
+
+;
+IF ::= If Parent_a SENTENCIA_BOOLEANA Parent_c Llave_a SENTENCIA Llave_c |
+    If Parent_a SENTENCIA_BOOLEANA Parent_c Llave_a SENTENCIA Continue Llave_c |
+    If Parent_a SENTENCIA_BOOLEANA Parent_c Llave_a SENTENCIA Break Llave_c
+;
+IF_ELSE ::= If Parent_a SENTENCIA_BOOLEANA Parent_c Llave_a SENTENCIA Llave_c Else Llave_a SENTENCIA Llave_c |
+If Parent_a SENTENCIA_BOOLEANA Parent_c Llave_a SENTENCIA Continue Llave_c Else Llave_a SENTENCIA Llave_c
+;
+FOR ::= For Parent_a T_dato Identificador Op_atribucion Numero P_coma SENTENCIA_BOOLEANA P_coma Identificador Op_atribucion Numero Parent_c Llave_a Continue SENTENCIA Llave_c |
+    For Parent_a Identificador Op_atribucion Numero P_coma SENTENCIA_BOOLEANA P_coma Identificador Op_atribucion Numero Parent_c Llave_a Continue SENTENCIA Llave_c |
+    For Parent_a T_dato Identificador Op_atribucion Numero P_coma SENTENCIA_BOOLEANA P_coma Identificador Op_incremento Parent_c Llave_a Continue SENTENCIA Llave_c  |
+    For Parent_a Identificador P_coma SENTENCIA_BOOLEANA P_coma Identificador Op_incremento Parent_c Llave_a Continue SENTENCIA Llave_c | 
+    For Parent_a T_dato Identificador Op_atribucion Numero P_coma SENTENCIA_BOOLEANA P_coma Identificador Op_atribucion Numero Parent_c Llave_a SENTENCIA Continue Llave_c
+;
+DO_WHILE::=  Do Llave_a SENTENCIA Llave_c While Parent_a SENTENCIA_BOOLEANA Parent_c P_coma |
+    Do Llave_a Continue SENTENCIA Llave_c While Parent_a SENTENCIA_BOOLEANA Parent_c P_coma |
+    Do Llave_a SENTENCIA Continue Llave_c While Parent_a SENTENCIA_BOOLEANA Parent_c P_coma 
+;
+WHILE ::= While Parent_a SENTENCIA_BOOLEANA Parent_c Llave_a SENTENCIA Llave_c P_coma |
+    While Parent_a SENTENCIA_BOOLEANA Parent_c Llave_a SENTENCIA Continue Llave_c P_coma |
+    While Parent_a SENTENCIA_BOOLEANA Parent_c Llave_a Continue SENTENCIA Llave_c P_coma
+;
+SWITCH ::= Switch Parent_a Identificador Parent_c Llave_a CASE CASE Default P_puntos SENTENCIA Llave_c  |
+    Switch Parent_a Identificador Parent_c Llave_a CASE Default P_puntos SENTENCIA Llave_c 
+;
+CASE ::= Case Identificador P_puntos SENTENCIA Break P_coma
+;
+VOID ::=  Void Identificador P_coma |
+    Void Identificador Parent_a T_dato Parent_c P_coma
+;
+TYPEOF ::=  Typeof Parent_a Identificador Parent_c
+;
+DIVISION ::=  Identificador Division Identificador P_coma
+;
+RESTA ::=  Identificador Resta Identificador P_coma
+;
+MULTIPLICACION ::=  Identificador Multiplicacion Identificador P_coma
+;
+SUMA ::=  Identificador Suma Identificador P_coma
+;
+RETURN ::= Return Parent_a Identificador Parent_c P_coma |
+    Return Parent_a Numero Parent_c P_coma 
+;
+STRUCT ::= Struct Llave_a SENTENCIA Llave_c Identificador P_coma
+;
+LINEA ::= Cadena Linea
+;
