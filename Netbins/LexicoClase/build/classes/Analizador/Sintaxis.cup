@@ -20,11 +20,13 @@ terminal Linea, Comillas, T_dato, Cadena, If, Else, Do, While, For, Switch,
     Struct, Typeof, Void, Int, Igual, Suma, Resta, Multiplicacion, Division, 
     Op_logico, Op_relacional, Op_atribucion, Op_incremento, Op_booleano, Parent_a, 
     Parent_c, Llave_a, Llave_c, Corchete_a, Corchete_c, Main, P_coma, Punto, Identificador,
-    Numero, ERROR, Numeral, P_puntos, Diple_a, Diple_c;
+    Numero, ERROR, Numeral, P_puntos, Diple_a, Diple_c, Coma, Using, Namespace, Std, Cin,
+    Scanf, Cout, Printf ;
 
 non terminal IMPORTACION, INICIO, SENTENCIA, DECLARACION, IF, IF_ELSE,               /*se puede dividir*/
     SENTENCIA_BOOLEANA, FOR, DO_WHILE, WHILE, SWITCH, CASE, VOID, 
-    TYPEOF, DIVISION, RETURN, STRUCT, RESTA, MULTIPLICACION, SUMA, LINEA ;
+    TYPEOF, DIVISION, RETURN, STRUCT, RESTA, MULTIPLICACION, SUMA, LINEA,
+    SCANF, CIN, COUT, PRINTF;
 
 start with INICIO;
 
@@ -34,7 +36,8 @@ INICIO ::=
     Main Parent_a Parent_c Llave_a SENTENCIA Llave_c
 ;
 IMPORTACION ::= 
-    Numeral Include Diple_a SENTENCIA Diple_c
+    Numeral Include Diple_a SENTENCIA Diple_c |
+    Using Namespace Std  P_coma
 ;
 SENTENCIA ::= 
     SENTENCIA DECLARACION |
@@ -56,7 +59,11 @@ SENTENCIA ::=
     RESTA |
     MULTIPLICACION |
     SUMA |
-    LINEA
+    LINEA |
+    SCANF |
+    CIN |
+    COUT |
+    PRINTF
 ;
 
 DECLARACION ::=
@@ -137,4 +144,24 @@ RETURN ::= Return Parent_a Identificador Parent_c P_coma |
 STRUCT ::= Struct Llave_a SENTENCIA Llave_c Identificador P_coma
 ;
 LINEA ::= Cadena Linea
+;
+
+CIN ::= Cin Diple_c Diple_c Cadena P_coma
+;
+
+COUT ::= Cout Diple_a Diple_a Cadena P_coma |
+Cout Diple_a Diple_a Cadena P_coma Diple_a Diple_a Cadena P_coma |
+Cout Diple_a Diple_a Comillas Cadena Comillas P_coma |
+Cout Diple_a Diple_a Comillas Cadena Comillas Diple_a Diple_a P_coma 
+;
+
+PRINTF ::= Printf Parent_a Cadena Parent_c P_coma |
+Printf Parent_a Comillas Cadena Comillas Parent_c P_coma |
+Printf Parent_a Numero Parent_c P_coma 
+;
+
+SCANF ::= Scanf Parent_a Comillas Cadena Comillas Parent_c P_coma |
+Scanf Parent_a Comillas Cadena Comillas Coma Numero Parent_c P_coma |
+Scanf Parent_a Numero Coma Numero Parent_c P_coma |
+Scanf Parent_a Numero Coma Numero Coma Numero Parent_c P_coma
 ;

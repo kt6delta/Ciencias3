@@ -85,6 +85,28 @@ espacio=[ ,\t,\r]+
 /* Palabra reservada void */
 ( void ) {lexemas=yytext(); return Void;}
 
+
+/* Palabra funcion cout */
+( cout) {lexemas=yytext(); return Cout;}
+
+/* Palabra funcion cin */
+( cin) {lexemas=yytext(); return Cin;}
+
+/* Palabra funcion using */
+( using) {lexemas=yytext(); return Using;}
+
+/* Palabra funcion scanf  */
+( scanf) {lexemas=yytext(); return Scanf;}
+
+/* Palabra funcion namespace */
+( namespace) {lexemas=yytext(); return Namespace;}
+
+/* Palabra funcion std */
+( std ) {lexemas=yytext(); return Std;}
+
+/* Palabra funcion Printf */
+( printf) {lexemas=yytext(); return Printf;}
+
 /* Llave de #*/
 ( "#" ) {lexemas=yytext(); return Numeral;}
 
@@ -140,6 +162,9 @@ espacio=[ ,\t,\r]+
 
 /* Dos puntos*/
 ( ":" ) {lexemas=yytext(); return P_puntos;}
+
+/* Coma */
+( "," ) {lexemas=yytext(); Coma;}
 
 /* Punto */
 ( "." ) {lexemas=yytext(); return Punto;}

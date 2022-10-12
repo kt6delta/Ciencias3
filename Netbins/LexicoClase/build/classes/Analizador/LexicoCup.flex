@@ -93,6 +93,27 @@ espacio=[ ,\t,\r,\n]+
 /* Palabra reservada void */
 ( void ) {return new Symbol(sym.Void, yychar, yyline, yytext());}
 
+/* Palabra funcion using */
+( using ) {return new Symbol(sym.Using, yychar, yyline, yytext());}
+
+/* Palabra funcion cin */
+( cin ) {return new Symbol(sym.Cin, yychar, yyline, yytext());}
+
+/* Palabra funcion cout */
+( cout ) {return new Symbol(sym.Cout, yychar, yyline, yytext());}
+
+/* Palabra funcion namespace */
+( namespace ) {return new Symbol(sym.Namespace, yychar, yyline, yytext());}
+
+/* Palabra funcion std */
+( std ) {return new Symbol(sym.Std, yychar, yyline, yytext());}
+
+/* Palabra funcion scanf  */
+( scanf ) {return new Symbol(sym.Scanf, yychar, yyline, yytext());}
+
+/* Palabra funcion Printf */
+( printf ) {return new Symbol(sym.Printf, yychar, yyline, yytext());}
+
 /* Operador Numeral #*/
 ( "#" ) {return new Symbol(sym.Numeral, yychar, yyline, yytext());}
 
@@ -154,6 +175,9 @@ espacio=[ ,\t,\r,\n]+
 
 /* Marcador de inicio de algoritmo */
 ( "main" ) {return new Symbol(sym.Main, yychar, yyline, yytext());}
+
+/* Coma */
+( "," ) {return new Symbol(sym.Coma, yychar, yyline, yytext());}
 
 /* Punto y coma */
 ( ";" ) {return new Symbol(sym.P_coma, yychar, yyline, yytext());}
