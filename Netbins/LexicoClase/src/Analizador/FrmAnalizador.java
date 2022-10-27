@@ -182,7 +182,7 @@ public class FrmAnalizador extends javax.swing.JFrame {
                     resultado += "  <Comillas>\t\t" + lexicos.lexemas + "\n";
                     break;
                 case Cadena:
-                    resultado += "  <Tipo de dato>\t" + lexicos.lexemas + "\n";
+                    resultado += "  <String>\t" + lexicos.lexemas + "\n";
                     break;
                 case T_dato:
                     resultado += "  <Tipo de dato>\t" + lexicos.lexemas + "\n";
@@ -202,6 +202,81 @@ public class FrmAnalizador extends javax.swing.JFrame {
                 case While:
                     resultado += "  <Reservada while>\t" + lexicos.lexemas + "\n";
                     break;
+                case Switch:
+                    resultado += "  <Reservada switch>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Include:
+                    resultado += "  <Reservada include>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Define:
+                    resultado += "  <Reservada define>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Break:
+                    resultado += "  <Reservada break>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Case:
+                    resultado += "  <Reservada case>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Continue:
+                    resultado += "  <Reservada continue>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Default:
+                    resultado += "  <Reservada default>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Register:
+                    resultado += "  <Reservada register>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Return:
+                    resultado += "  <Reservada return>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Unsigned:
+                    resultado += "  <Reservada unsigned>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Struct:
+                    resultado += "  <Reservada  struct>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Typeof:
+                    resultado += "  <Reservada typeof>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Void:
+                    resultado += "  <Reservada void>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Std:
+                    resultado += "  <Reservada std>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Namespace:
+                    resultado += "  <Reservada namespace>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Cin:
+                    resultado += "  <Reservada cin>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Cout:
+                    resultado += "  <Reservada cout>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Using:
+                    resultado += "  <Reservada using>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Scanf:
+                    resultado += "  <Reservada scanf>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Printf:
+                    resultado += "  <Reservada printf>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Coma:
+                    resultado += "  <Reservada coma>\t" + lexicos.lexemas + "\n";
+                    break;
+                case Numeral:
+                    resultado += "  <Reservada numeral>\t" + lexicos.lexemas + "\n";
+                    break;   
+                case Diple_a:
+                    resultado += "  < diple apertura(<) >\t" + lexicos.lexemas + "\n";
+                    break;   
+                case Diple_c:
+                    resultado += "  <diple cierre(>) >\t" + lexicos.lexemas + "\n";
+                    break;   
+                case P_puntos:
+                    resultado += "  <dos puntos (:) >\t" + lexicos.lexemas + "\n";
+                    break;   
                 case For:
                     resultado += "  <Reservada while>\t" + lexicos.lexemas + "\n";
                     break;
